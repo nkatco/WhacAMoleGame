@@ -22,8 +22,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button startButton;
     private Spinner spinner;
     private CheckBox VibrationCheckBox;
-    private TextView RecordScoreTextView;
-    private static int recordScore = 0;
+    private static TextView RecordScoreTextView;
+    private static int recordScore;
 
     private List<String> difficultiesList = new ArrayList<>();
     public static int difficulty;
@@ -36,6 +36,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        myPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        myEditor = myPreferences.edit();
 
         difficultiesList.add("Easy");
         difficultiesList.add("Medium");
@@ -72,25 +75,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         VibrationCheckBox.setOnClickListener(this);
 
         RecordScoreTextView = findViewById(R.id.RecordScoreTextView);
-        try {
-            recordScore = getRecordScoreEdit();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
+        recordScore = getRecordScoreEdit();
         RecordScoreTextView.setText("Record score: " + recordScore);
 
         startButton = findViewById(R.id.StartButton);
         startButton.setOnClickListener(this);
-
-        myPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        myEditor = myPreferences.edit();
     }
     public static void setRecordScoreEdit(int score) {
-        myEditor.putInt("SCORE", score);
+        myEditor.putInt("score", score);
         myEditor.commit();
     }
     public static int getRecordScoreEdit() {
-        return myPreferences.getInt("SCORE",0);
+        return myPreferences.getInt("score",0);
     }
     @Override
     public void onClick(View view) {
@@ -120,6 +117,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static void setRecordScore(int recordScore) {
         if (recordScore > MainActivity.recordScore) {
             MainActivity.recordScore = recordScore;
+            RecordScoreTextView.setText(recordScore);
+            setRecordScoreEdit(recordScore);
         }
     }
 }

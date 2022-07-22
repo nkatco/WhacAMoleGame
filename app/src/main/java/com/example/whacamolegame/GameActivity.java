@@ -304,7 +304,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         inGame = false;
         if (MainActivity.getRecordScore() < score) {
             MainActivity.setRecordScore(score);
-            MainActivity.setRecordScoreEdit(score);
         }
         Intent intent = new Intent(this, EndActivity.class);
         startActivity(intent);
